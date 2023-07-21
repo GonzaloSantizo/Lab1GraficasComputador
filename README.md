@@ -3,11 +3,11 @@ The glPolygon function is an implementation of a basic scanline algorithm to fil
 It is typically used as part of a graphics library or module.
 
 
-#Parameters
+# Parameters
 vertices (list): A list of (x, y) coordinate pairs that define the vertices of the polygon.
 clr (tuple, optional): An optional parameter representing the color in the format (b, g, r), where b, g, and r are the color components for blue, green, and red, respectively. If this parameter is not provided (None), it uses the current color (self.currColor) as the default.
 
-#Algorithm Description
+# Algorithm Description
 Calculate the bounding box of the polygon by finding the minimum and maximum x and y coordinates of the vertices.
 
 Convert the color to the expected format (b, g, r) if provided; otherwise, use the default current color.
