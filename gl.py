@@ -224,6 +224,13 @@ class Renderer(object):
             if self.primitiveType==TRIANGLES:
                 self.glTriangle(prim[0],prim[1],prim[2],primColor)
 
+    def glPolygon(self, vertices, clr=None):
+        num_vertices = len(vertices)
+        for i in range(num_vertices):
+            v0 = vertices[i]
+            v1 = vertices[(i + 1) % num_vertices]
+            self.glLine(V2(v0[0], v0[1]), V2(v1[0], v1[1]), clr or self.currColor)
+
     def glFinish(self,filename):
         with open(filename,"wb") as file:
             #Header
