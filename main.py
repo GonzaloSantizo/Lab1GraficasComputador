@@ -48,7 +48,7 @@ polygon3_vertices = [
 
 # Convert the third polygon vertices to V2 objects and draw the polygon with the desired color
 polygon3_vertices_v2 = [V2(v[0], v[1]) for v in polygon3_vertices]
-rend.glPolygon(polygon3_vertices_v2, color(1, 1, 0))  # Use green color (0, 1, 0)
+rend.glPolygon(polygon3_vertices_v2, color(0, 0, 1))  # Use blue color (0, 1, 0)
 
 # Render the scene (including all three polygons)
 rend.glRender()
@@ -65,7 +65,7 @@ polygon2_vertices = [
 
 # Convert the second polygon vertices to V2 objects and draw the polygon with the desired color
 polygon2_vertices_v2 = [V2(v[0], v[1]) for v in polygon2_vertices]
-rend.glPolygon(polygon2_vertices_v2, color(0, 0, 0))  # Use blue color (0, 0, 1)
+rend.glPolygon(polygon2_vertices_v2, color(0, 0, 0))  # Use black color (0, 0, 1)
 
 
 # Save the result to a file
