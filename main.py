@@ -19,7 +19,7 @@ polygon_vertices = [
     (193, 383)
 ]
 
-# Convert the polygon vertices to V2 objects and draw the polygon
+# Convert the polygon vertices to V2 objects and draw the polygon with the desired color
 polygon_vertices_v2 = [V2(v[0], v[1]) for v in polygon_vertices]
 rend.glPolygon(polygon_vertices_v2, color(1, 0, 0))  # Use red color (1, 0, 0)
 

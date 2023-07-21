@@ -226,34 +226,71 @@ class Renderer(object):
 
     def glPolygon(self, vertices, clr=None):
         num_vertices = len(vertices)
-        for i in range(num_vertices):
-            v0 = vertices[i]
-            v1 = vertices[(i + 1) % num_vertices]
-            self.glLine(V2(v0[0], v0[1]), V2(v1[0], v1[1]), clr or self.currColor)
 
-    def glFinish(self,filename):
-        with open(filename,"wb") as file:
-            #Header
+        # Calculate the bounding box of the polygon
+        min_x, min_y = max_x, max_y = vertices[0]
+        for x, y in vertices:
+            min_x = min(min_x, x)
+            max_x = max(max_x, x)
+            min_y = min(min_y, y)
+            max_y = max(max_y, y)
+
+        # Convert the color to the expected format (b, g, r)
+        color_byte = clr or self.currColor
+        b, g, r = color_byte
+
+        # Loop through each row in the bounding box
+        for y in range(min_y, max_y + 1):
+            intersections = []
+
+            # Loop through each edge of the polygon
+            for i in range(num_vertices):
+                j = (i + 1) % num_vertices
+                v0 = vertices[i]
+                v1 = vertices[j]
+
+                # Check if the edge intersects with the current row (y)
+                if v0[1] < y and v1[1] >= y or v1[1] < y and v0[1] >= y:
+                    x_intersection = v0[0] + (y - v0[1]) / (v1[1] - v0[1]) * (v1[0] - v0[0])
+                    intersections.append(x_intersection)
+
+            # Sort the intersection points
+            intersections.sort()
+
+            # Fill the pixels between pairs of intersections
+            for i in range(0, len(intersections), 2):
+                x_start = int(intersections[i])
+                x_end = min(int(intersections[i + 1]), max_x)
+
+                # Fill the row with the specified color
+                for x in range(x_start, x_end + 1):
+                    self.glPoint(x, y, (b, g, r))
+
+
+    def glFinish(self, filename):
+        with open(filename, "wb") as file:
+            # Header
             file.write(char("B"))
             file.write(char("M"))
-            file.write(dword(14+40+(self.width*self.height*3)))
+            file.write(dword(14 + 40 + (self.width * self.height * 3)))
             file.write(dword(0))
-            file.write(dword(14+40))
+            file.write(dword(14 + 40))
 
-            #InfoHeader
+            # InfoHeader
             file.write(dword(40))
             file.write(dword(self.width))
             file.write(dword(self.height))
             file.write(word(1))
             file.write(word(24))
             file.write(dword(0))
-            file.write(dword((self.width*self.height*3)))
+            file.write(dword(self.width * self.height * 3))
             file.write(dword(0))
             file.write(dword(0))
             file.write(dword(0))
             file.write(dword(0))
 
-            #Color table
+            # Color table
             for y in range(self.height):
                 for x in range(self.width):
-                    file.write(self.pixels[x][y])
+                    # Convert color tuple to bytes and write to file
+                    file.write(bytes(self.pixels[x][y]))
